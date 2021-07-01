@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="754.0" prefWidth="1107.0" style="-fx-background-color: darkcyan;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="autoservice.main.MainController">
+   <children>
+      <Button fx:id="serviceBtn" layoutY="14.0" mnemonicParsing="false" onAction="#serviceAct" prefHeight="52.0" prefWidth="216.0" text="Xidmətlər" textFill="#2f0202">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Button>
+      <Button fx:id="customerBtn" layoutY="89.0" mnemonicParsing="false" onAction="#customerAct" prefHeight="52.0" prefWidth="216.0" text="Müştərilər">
+         <font>
+            <Font size="25.0" />
+         </font>
+      </Button>
+      <Button fx:id="applyBtn" layoutY="172.0" mnemonicParsing="false" onAction="#applyAct" prefHeight="52.0" prefWidth="216.0" text="Müraciətlər"> 
+         <font>
+            <Font size="25.0" />
+         </font></Button>
+      <TableView fx:id="applyTable" layoutX="1.0" layoutY="437.0" prefHeight="316.0" prefWidth="1100.0">
+         <columns>
+            <TableColumn fx:id="col_id" prefWidth="106.0" text="Id" />
+            <TableColumn fx:id="col_customer" prefWidth="265.0" text="Müştəri" />
+            <TableColumn fx:id="col_service" prefWidth="359.0" text="Xidmət" />
+            <TableColumn fx:id="col_price" prefWidth="143.0" text="Qiymət" />
+            <TableColumn fx:id="col_status" prefWidth="226.0" text="Status" />
+         </columns>
+      </TableView>
+      <ImageView fitHeight="360.0" fitWidth="357.0" layoutX="296.0" layoutY="-7.0" opacity="0.34" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/carservice.jpg" />
+         </image>
+      </ImageView>
+      <TableView fx:id="customerTable" layoutX="-2.0" layoutY="437.0" prefHeight="325.0" prefWidth="1109.0">
+        <columns>
+          <TableColumn fx:id="col_CustomerId" prefWidth="75.0" text="Id" />
+          <TableColumn fx:id="col_CustomerName" prefWidth="182.0" text="Ad -Soyad" />
+            <TableColumn fx:id="col_CustomerPhone" prefWidth="211.0" text="Telefon" />
+            <TableColumn fx:id="col_CustomerCar" prefWidth="188.0" text="Avtomobil" />
+            <TableColumn fx:id="col_CustomerModel" minWidth="0.0" prefWidth="194.0" text="Model" />
+            <TableColumn fx:id="col_carNum" prefWidth="258.0" text="Avtomobil nömrəsi" />
+        </columns>
+      </TableView>
+      <Button layoutX="18.0" layoutY="388.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="87.0" style="-fx-background-color: lightsteelblue;" text="Add">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Button layoutX="129.0" layoutY="388.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="87.0" style="-fx-background-color: lightsteelblue;" text="Edit">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+      <Button layoutX="253.0" layoutY="388.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="87.0" style="-fx-background-color: lightsteelblue;" text="Delete">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
