@@ -22,8 +22,8 @@ public class Service extends Model {
 
     @Override
     public String toString() {
-
         return service+price;
+
     }
 
 }

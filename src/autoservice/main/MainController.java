@@ -5,11 +5,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -62,21 +67,79 @@ public class MainController {
     @FXML
     private TableColumn<Customer, CarModel> col_CustomerModel;
     @FXML
-    private TableColumn<Customer, String > col_carNum;
+    private TableColumn<Customer, String> col_carNum;
+
+    @FXML
+    private TableView<Service> serviceTable;
+
+    @FXML
+    private TableColumn<Service, Integer> col_servicesİd;
+
+    @FXML
+    private TableColumn<Service, String> col_services;
+
+    @FXML
+    private TableColumn<Service, String> col_serPrice;
+
+    private String btnName="";
+
+
+
+    private void showServicesList() {
+        ObservableList<Service> servicesList = getServiceList();
+        col_servicesİd.setCellValueFactory(new PropertyValueFactory<Service,Integer>("id"));
+        col_services.setCellValueFactory(new PropertyValueFactory<Service,String>("service"));
+        col_serPrice.setCellValueFactory(new PropertyValueFactory<Service,String>("price"));
+        serviceTable.setItems(servicesList);
+        serviceTable.setVisible(true);
+
+    }
+
+    public ObservableList<Service> getServiceList() {
+        DbHelper db=new DbHelper();
+        ObservableList<Service>list=FXCollections.observableArrayList();
+        String sql="select *from service order by id";
+        try (Connection c = db.getConnection();
+             Statement st=c.createStatement();
+             ResultSet rs = st.executeQuery(sql)){
+            while (rs.next()){
+               Service service=new Service();
+               service.setId(rs.getInt("id"));
+               service.setService(rs.getString("service_name"));
+               service.setPrice(rs.getString("service_price"));
+               list.add(service);
+
+            }
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
+        return list;
+    }
 
 
     @FXML
     void applyAct(ActionEvent event) throws Exception {
-
+        btnName="apply";
         showApplyList();
         customerTable.setVisible(false);
+        serviceTable.setVisible(false);
 
     }
 
     @FXML
     void customerAct(ActionEvent event) throws Exception {
+        btnName="customer";
        showCustomerList();
        applyTable.setVisible(false);
+       serviceTable.setVisible(false);
+    }
+    @FXML
+    void serviceAct(ActionEvent event) {
+        btnName="service";
+        showServicesList();
+        applyTable.setVisible(false);
+        customerTable.setVisible(false);
+
     }
      @FXML
       void showCustomerList()throws Exception {
@@ -125,10 +188,6 @@ public class MainController {
 return list;
     }
 
-    @FXML
-    void serviceAct(ActionEvent event) {
-
-    }
 
     public ObservableList<Apply> getApplyList()  {
 
@@ -181,7 +240,27 @@ return list;
         applyTable.setVisible(true);
     }
 
+    @FXML
+    void addAction(ActionEvent event) throws Exception {
+        switch (btnName){
+            case "customer":
+                Parent root= FXMLLoader.load(getClass().getResource("newcustomer.fxml"));
+                Stage stage=new Stage();
+                stage.setTitle("Add new customer");
+                stage.setScene(new Scene(root,400,700));
+                stage.show();
+        }
 
+    }
+    @FXML
+    void deleteAction(ActionEvent event) {
+
+    }
+
+    @FXML
+    void editAction(ActionEvent event) {
+
+    }
 
 }
 
