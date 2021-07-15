@@ -1,6 +1,7 @@
 package autoservice.main;
 
 import autoservice.model.*;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -9,11 +10,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
+import javax.naming.Binding;
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -81,6 +86,7 @@ public class MainController {
     @FXML
     private TableColumn<Service, String> col_serPrice;
 
+
     private String btnName="";
 
 
@@ -98,7 +104,7 @@ public class MainController {
     public ObservableList<Service> getServiceList() {
         DbHelper db=new DbHelper();
         ObservableList<Service>list=FXCollections.observableArrayList();
-        String sql="select *from service order by id";
+        String sql="select *from service where active=1 order by id";
         try (Connection c = db.getConnection();
              Statement st=c.createStatement();
              ResultSet rs = st.executeQuery(sql)){
@@ -132,6 +138,7 @@ public class MainController {
        showCustomerList();
        applyTable.setVisible(false);
        serviceTable.setVisible(false);
+
     }
     @FXML
     void serviceAct(ActionEvent event) {
@@ -152,6 +159,7 @@ public class MainController {
          col_carNum.setCellValueFactory(new PropertyValueFactory<Customer,String>("carNum"));
          customerTable.setItems(customerList);
          customerTable.setVisible(true);
+
 
     }
 
@@ -242,18 +250,36 @@ return list;
 
     @FXML
     void addAction(ActionEvent event) throws Exception {
-        switch (btnName){
+        switch (btnName) {
             case "customer":
-                Parent root= FXMLLoader.load(getClass().getResource("newcustomer.fxml"));
-                Stage stage=new Stage();
+                Parent custRoot = FXMLLoader.load(getClass().getResource("newcustomer.fxml"));
+                Stage stage = new Stage();
                 stage.setTitle("Add new customer");
-                stage.setScene(new Scene(root,400,700));
+                stage.setScene(new Scene(custRoot, 400, 700));
                 stage.show();
+                break;
+            case "service":
+                Parent serviceRoot = FXMLLoader.load(getClass().getResource("newservicelist.fxml"));
+                Stage serviceStage = new Stage();
+                serviceStage.setTitle("Add new Service");
+                serviceStage.setScene(new Scene(serviceRoot, 536, 485));
+                serviceStage.setResizable(false);
+                serviceStage.show();
+                break;
+            case "apply":
+                Parent applyRoot=FXMLLoader.load(getClass().getResource("newappeal.fxml"));
+                Stage applyStage=new Stage();
+                applyStage.setTitle("Add new Appeal");
+                applyStage.setScene(new Scene(applyRoot,536,485));
+                applyStage.setResizable(false);
+                applyStage.show();
+
         }
 
     }
     @FXML
     void deleteAction(ActionEvent event) {
+
 
     }
 
@@ -261,6 +287,14 @@ return list;
     void editAction(ActionEvent event) {
 
     }
+    void deleteService(Integer serviceId)throws Exception{
+        DbHelper db=new DbHelper();
+        String sql="update service set active=0 where id=?;";
+        try (Connection c = db.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1,serviceId);
+            ps.execute();
 
+        }
+    }
 }
 
