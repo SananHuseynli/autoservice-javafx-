@@ -1,7 +1,7 @@
 package autoservice.main;
 
 import autoservice.model.*;
-import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,7 +11,11 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 
+import javax.swing.*;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 
 public class ApplyControllers implements Initializable {
@@ -37,6 +41,9 @@ public class ApplyControllers implements Initializable {
     private ComboBox<Service> serviceCombo;
 
     @FXML
+    private ComboBox<Status> statusCombo;
+
+    @FXML
     private Label newService_carNameLbl;
 
     @FXML
@@ -46,17 +53,7 @@ public class ApplyControllers implements Initializable {
     private Button newService_saveBtn;
 
     @FXML
-    void customerAct(ActionEvent event) {
-
-
-        }
-
-
-
-    @FXML
-    void serviceAction(ActionEvent event) {
-
-    }
+    private Button ok;
 
     @FXML
     private Button newService_cancelBtn;
@@ -81,18 +78,42 @@ public class ApplyControllers implements Initializable {
         serviceCombo.setPromptText("Select service");
         ObservableList<Service> listService = main.getServiceList();
         serviceCombo.setItems(listService);
+        ObservableList<Status>listStatus=getStatusList();
+        statusCombo.setItems(listStatus);
+    }
+
+    @FXML
+    void okAct(ActionEvent event) {
         Customer customer = customerCombo.getSelectionModel().getSelectedItem();
         if (customer != null) {
-            setCustomerCar(customer);
-
-
-        }
-        }
-        void setCustomerCar(Customer select){
-            newService_carNameLbl.setText(select.getCar().getCompany());
-            newService_modelNameLbl.setText(select.getModel().getModelName());
+            newService_carNameLbl.setText(customer.getCar().getCompany());
+            newService_modelNameLbl.setText(customer.getModel().getModelName());
 
         }
 
     }
+
+    public ObservableList<Status> getStatusList() {
+        DbHelper db = new DbHelper();
+        ObservableList<Status> list = FXCollections.observableArrayList();
+        String sql = "select id,status from status where active=1";
+        try (Connection c = db.getConnection();
+             Statement st = c.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                Status status = new Status();
+                status.setId(rs.getInt("id"));
+                status.setStatus(rs.getString("status"));
+                list.add(status);
+
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return list;
+    }
+}
+
+
 
