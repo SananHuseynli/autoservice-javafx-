@@ -14,11 +14,12 @@ import javafx.scene.layout.AnchorPane;
 import javax.swing.*;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ResourceBundle;
 
-public class ApplyControllers implements Initializable {
+public class NewAppealControllers implements Initializable {
     @FXML
     private AnchorPane newServicePane;
 
@@ -65,6 +66,20 @@ public class ApplyControllers implements Initializable {
 
     @FXML
     void saveAction(ActionEvent event) {
+        Customer customer=customerCombo.getSelectionModel().getSelectedItem();
+        Service service=serviceCombo.getSelectionModel().getSelectedItem();
+        Status status=statusCombo.getSelectionModel().getSelectedItem();
+        Apply apply=new Apply();
+        try {
+            apply.setCustomer(customer);
+            apply.setService(service);
+            apply.setStatus(status);
+            addApp(apply);
+            JOptionPane.showMessageDialog(null,"Yeni müraciət əlavə edilmişdir");
+        }catch (Exception ex) {
+            JOptionPane.showMessageDialog(null,"Error");
+            ex.printStackTrace();
+        }
 
     }
 
@@ -112,6 +127,18 @@ public class ApplyControllers implements Initializable {
             ex.printStackTrace();
         }
         return list;
+    }
+
+    void addApp(Apply apply)throws Exception{
+        DbHelper db=new DbHelper();
+        String sql="insert into appeal\n" +
+                "values(nextval('appeal_seq'),?,1,?,?)";
+        try(Connection c=db.getConnection(); PreparedStatement ps=c.prepareStatement(sql)){
+            ps.setInt(1,apply.getCustomer().getId());
+            ps.setInt(2,apply.getStatus().getId());
+            ps.setInt(3,apply.getService().getId());
+            ps.execute();
+        }
     }
 }
 

@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="407.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="autoservice.main.newCustomerController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="407.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="autoservice.main.NewCustomerController">
    <children>
       <Label fx:id="newCustNameLbl" alignment="BASELINE_LEFT" layoutX="1.0" layoutY="53.0" prefHeight="45.0" prefWidth="163.0" text="Ad/Soyad">
          <font>
@@ -26,13 +26,13 @@
             <Font size="22.0" />
          </font>
       </Label>
-      <ComboBox fx:id="newCustCarCombo" layoutX="210.0" layoutY="181.0" onAction="#carComboAction" prefHeight="34.0" prefWidth="183.0" />
+      <ComboBox fx:id="newCustCarCombo" layoutX="210.0" layoutY="181.0" prefHeight="34.0" prefWidth="183.0" />
       <Label fx:id="newCustModelLbl" alignment="BASELINE_LEFT" layoutX="1.0" layoutY="247.0" prefHeight="45.0" prefWidth="163.0" text="Model">
          <font>
             <Font size="22.0" />
          </font>
       </Label>
-      <ComboBox fx:id="newCustModelCombo" layoutX="210.0" layoutY="252.0" onAction="#modelComboAction" prefHeight="34.0" prefWidth="183.0" />
+      <ComboBox fx:id="newCustModelCombo" layoutX="210.0" layoutY="252.0" prefHeight="34.0" prefWidth="183.0" />
       <Label fx:id="newCustCarNumLbl" alignment="BASELINE_LEFT" layoutX="1.0" layoutY="316.0" prefHeight="45.0" prefWidth="163.0" text="Nömrəsi">
          <font>
             <Font size="22.0" />

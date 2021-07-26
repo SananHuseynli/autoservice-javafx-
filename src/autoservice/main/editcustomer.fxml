@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="editCustPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="407.0" style="-fx-background-color: Khaki;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="autoservice.main.EditCustomerController">
+   <children>
+      <Label fx:id="editCustNameLbl" alignment="BASELINE_LEFT" layoutX="1.0" layoutY="53.0" prefHeight="45.0" prefWidth="163.0" text="Ad/Soyad">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <TextField fx:id="editCustNameField" layoutX="210.0" layoutY="58.0" prefHeight="34.0" prefWidth="183.0" />
+      <TextField fx:id="editCustPhoneField" layoutX="210.0" layoutY="115.0" prefHeight="34.0" prefWidth="183.0" />
+      <Label fx:id="editCustPhoneLbl" alignment="BASELINE_LEFT" layoutX="1.0" layoutY="110.0" prefHeight="45.0" prefWidth="163.0" text="Telefon">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <Label fx:id="editCustCarLbl" alignment="BASELINE_LEFT" layoutX="1.0" layoutY="176.0" prefHeight="45.0" prefWidth="163.0" text="Avtomobil">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="editCustCarCombo" layoutX="210.0" layoutY="181.0" prefHeight="34.0" prefWidth="183.0" />
+      <Label fx:id="editCustModelLbl" alignment="BASELINE_LEFT" layoutX="1.0" layoutY="247.0" prefHeight="45.0" prefWidth="163.0" text="Model">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="editCustModelCombo" layoutX="210.0" layoutY="252.0" prefHeight="34.0" prefWidth="183.0" />
+      <Label fx:id="editCustCarNumLbl" alignment="BASELINE_LEFT" layoutX="1.0" layoutY="316.0" prefHeight="45.0" prefWidth="163.0" text="Nömrəsi">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <TextField fx:id="editCustNumField" layoutX="210.0" layoutY="322.0" prefHeight="34.0" prefWidth="183.0" />
+      <Button fx:id="editCustSaveBtn" layoutX="25.0" layoutY="396.0" mnemonicParsing="false" onAction="#editSaveAct" prefHeight="34.0" prefWidth="118.0" text="Save">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+      <Button fx:id="editCustCancelBtn" layoutX="243.0" layoutY="396.0" mnemonicParsing="false" onAction="#editCancelAct" prefHeight="34.0" prefWidth="118.0" text="Cancel" textFill="#c35959">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Button>
+   </children>
+</AnchorPane>
