@@ -4,19 +4,27 @@ import autoservice.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
+import javax.swing.*;
+import java.io.IOException;
+import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ResourceBundle;
 
 public class MainController {
 
@@ -92,14 +100,26 @@ public class MainController {
     @FXML
     private ImageView editIcon;
 
+
     @FXML
-    private ImageView deleteIcon;
+    private ImageView editIcon1;
+
+    @FXML
+    private ImageView editIcon2;
+
+    @FXML
+    private ImageView serviceDeleteIcon;
+
+    @FXML
+    private ImageView appealDeleteIcon;
+
+    @FXML
+    private ImageView customerDeleteIcon;
 
 
     private String btnName = "";
 
-    private String buttonName="";
-
+    private String buttonName = "";
 
     private void showServicesList() {
         ObservableList<Service> servicesList = getServiceList();
@@ -108,13 +128,10 @@ public class MainController {
         col_serPrice.setCellValueFactory(new PropertyValueFactory<Service, String>("price"));
         serviceTable.setItems(servicesList);
         serviceTable.setVisible(true);
-        buttonName="serviceTable";
+        buttonName = "serviceTable";
 
     }
-    private void nameAppTable(){
-      applyTable.setVisible(true);
-        buttonName="appealTable";
-    }
+
 
     public ObservableList<Service> getServiceList() {
         DbHelper db = new DbHelper();
@@ -140,31 +157,45 @@ public class MainController {
 
     @FXML
     void applyAct(ActionEvent event) throws Exception {
-        btnName = "apply";
         showApplyList();
         customerTable.setVisible(false);
         serviceTable.setVisible(false);
+        btnName = "apply";
+        editIcon1.setVisible(true);
+        editIcon.setVisible(false);
+        editIcon2.setVisible(false);
+        customerDeleteIcon.setVisible(false);
+        serviceDeleteIcon.setVisible(false);
+
 
     }
 
 
-
-
     @FXML
     void customerAct(ActionEvent event) throws Exception {
-        btnName = "customer";
         showCustomerList();
         applyTable.setVisible(false);
         serviceTable.setVisible(false);
+        btnName = "customer";
+        editIcon1.setVisible(false);
+        editIcon2.setVisible(false);
+        editIcon.setVisible(true);
+        serviceDeleteIcon.setVisible(false);
+        appealDeleteIcon.setVisible(false);
 
     }
 
     @FXML
     void serviceAct(ActionEvent event) {
-        btnName = "service";
         showServicesList();
         applyTable.setVisible(false);
         customerTable.setVisible(false);
+        btnName = "service";
+        editIcon1.setVisible(false);
+        editIcon.setVisible(false);
+        editIcon2.setVisible(true);
+        customerDeleteIcon.setVisible(false);
+        appealDeleteIcon.setVisible(false);
 
     }
 
@@ -179,10 +210,7 @@ public class MainController {
         col_carNum.setCellValueFactory(new PropertyValueFactory<Customer, String>("carNum"));
         customerTable.setItems(customerList);
         customerTable.setVisible(true);
-        buttonName="customerTable";
-
-
-
+        buttonName = "customerTable";
 
 
     }
@@ -268,17 +296,19 @@ public class MainController {
         col_status.setCellValueFactory(new PropertyValueFactory<Apply, Status>("status"));
         applyTable.setItems(applist);
         applyTable.setVisible(true);
+        buttonName = "appealTable";
 
     }
 
-
+    public static Stage stage = new Stage();
+    public static Stage serviceStage = new Stage();
+    public static Stage applyStage = new Stage();
 
     @FXML
     void addClick(MouseEvent event) throws Exception {
         switch (btnName) {
             case "customer":
                 Parent customerRoot = FXMLLoader.load(getClass().getResource("newcustomer.fxml"));
-                Stage stage = new Stage();
                 stage.setTitle("Add new customer");
                 stage.setScene(new Scene(customerRoot, 400, 700));
                 stage.show();
@@ -286,7 +316,6 @@ public class MainController {
 
             case "service":
                 Parent serviceRoot = FXMLLoader.load(getClass().getResource("newservice.fxml"));
-                Stage serviceStage = new Stage();
                 serviceStage.setTitle("Add new Service");
                 serviceStage.setScene(new Scene(serviceRoot, 536, 485));
                 serviceStage.setResizable(false);
@@ -295,7 +324,6 @@ public class MainController {
             case "apply":
 
                 Parent applyRoot = FXMLLoader.load(getClass().getResource("newappeal.fxml"));
-                Stage applyStage = new Stage();
                 applyStage.setTitle("Add new Appeal");
                 applyStage.setScene(new Scene(applyRoot, 536, 485));
                 applyStage.setResizable(false);
@@ -306,62 +334,130 @@ public class MainController {
     }
 
 
-    @FXML
-    void deleteClick(MouseEvent event) {
-
-    }
+    public static int id;
+    public static Stage customerStage = new Stage();
 
     @FXML
-    void editClick(MouseEvent event) throws Exception {
+    void editClick(MouseEvent ev) throws Exception {
         Customer customer = customerTable.getSelectionModel().getSelectedItem();
-        Apply apply = applyTable.getSelectionModel().getSelectedItem();
-        Service service = serviceTable.getSelectionModel().getSelectedItem();
-        // if(customer!=null && apply==null && service==null){
-        switch (buttonName) {
-            case "customerTable":
-                Parent editCustomerRoot = FXMLLoader.load(getClass().getResource("editcustomer.fxml"));
-                Stage customerStage = new Stage();
-                customerStage.setTitle("Update customer");
-                customerStage.setScene(new Scene(editCustomerRoot, 400, 700));
-                customerStage.show();
-                break;
-            case "serviceTable":
-                // else if(service!=null && customer==null && apply==null){
-                Parent editServiceRoot = FXMLLoader.load(getClass().getResource("editservice.fxml"));
-                Stage serviceStage = new Stage();
-                serviceStage.setTitle("Update service");
-                serviceStage.setScene(new Scene(editServiceRoot, 400, 700));
-                serviceStage.show();
-                break;
-            //  }else if (apply!=null && customer==null && service==null){
-            case "appealTable":
-                Parent editAppealRoot = FXMLLoader.load(getClass().getResource("editappeal.fxml"));
-                Stage appealStage = new Stage();
-                appealStage.setTitle("Update appeal");
-                appealStage.setScene(new Scene(editAppealRoot, 400, 700));
-                appealStage.show();
 
+        id = customer.getId();
+        if (customer != null) {
+            Parent customerRoot = FXMLLoader.load(getClass().getResource("editcustomer.fxml"));
+            customerStage.setTitle("Update customer");
+            customerStage.setScene(new Scene(customerRoot, 400, 700));
+            customerStage.show();
+
+        }
+    }
+
+
+    public static int appealId;
+    public static Stage appealStage = new Stage();
+
+    @FXML
+    void editClick1(MouseEvent event) throws Exception {
+        Apply apply = applyTable.getSelectionModel().getSelectedItem();
+        appealId = apply.getId();
+        if (apply != null) {
+            Parent appealRoot = FXMLLoader.load(getClass().getResource("editappeal.fxml"));
+            Stage appealStage = new Stage();
+            appealStage.setTitle("Update appeal");
+            appealStage.setScene(new Scene(appealRoot, 400, 700));
+            appealStage.show();
         }
 
     }
 
 
+    public static int serviceId;
+    public static Stage editServiceStage = new Stage();
 
+    @FXML
+    void editClick2(MouseEvent event) throws Exception {
+        Service service = serviceTable.getSelectionModel().getSelectedItem();
+        serviceId = service.getId();
+        if (service != null) {
+            Parent serviceRoot = FXMLLoader.load(getClass().getResource("editservice.fxml"));
+            editServiceStage.setTitle("Update service");
+            editServiceStage.setScene(new Scene(serviceRoot, 536, 485));
+            editServiceStage.setResizable(false);
+            editServiceStage.show();
+        }
+    }
 
+    @FXML
+    void seriveDeleteClick(MouseEvent event) throws Exception {
+        int isConfirmed;
+        Integer serviceId = serviceTable.getSelectionModel().getSelectedItem().getId();
+        if (serviceId != null) {
+            isConfirmed = JOptionPane.showConfirmDialog(null, "Xidməti silmət istəyirsiniz?", "Xidməti sil", JOptionPane.YES_NO_OPTION);
+            if (isConfirmed == JOptionPane.YES_OPTION) {
+                deleteService(serviceId);
+                JOptionPane.showMessageDialog(null, "Xidmət silinmişdir");
+            }
+        }
 
+    }
 
+    @FXML
+    void customerDeleteClick(MouseEvent event) throws Exception {
+        int isConfirmed;
+        Integer customerId = customerTable.getSelectionModel().getSelectedItem().getId();
+        if (customerId != null) {
+            isConfirmed = JOptionPane.showConfirmDialog(null, "Müştərini silmək istədiyinizə əminsiniz?", "Müştərini sil", JOptionPane.YES_NO_OPTION);
+            if (isConfirmed == JOptionPane.YES_OPTION) {
+                deleteCustomer(customerId);
+                JOptionPane.showMessageDialog(null, "Müştəri silinmişdir");
+            }
+        }
 
+    }
 
+    @FXML
+    void appealDeleteClick(MouseEvent event) throws Exception {
+        int isConfirmed;
+        Integer appealId = applyTable.getSelectionModel().getSelectedItem().getId();
+        if (appealId != null) {
+            isConfirmed = JOptionPane.showConfirmDialog(null, "Müraciəti silmək istədiyinizə əminsiniz?", "Müraciəti sil", JOptionPane.YES_NO_OPTION);
+            if (isConfirmed == JOptionPane.YES_OPTION) {
+               deleteAppeal(appealId);
+                JOptionPane.showMessageDialog(null, "Müştəri silinmişdir");
+            }
+        }
+    }
 
-
-    void deleteService(Integer serviceId)throws Exception{
-        DbHelper db=new DbHelper();
-        String sql="update service set active=0 where id=?;";
+    void deleteService(Integer serviceId) throws Exception {
+        DbHelper db = new DbHelper();
+        String sql = "update service set active=0 where id=?;";
         try (Connection c = db.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setInt(1,serviceId);
-            ps.execute();
+            ps.setInt(1, serviceId);
+            ps.executeUpdate();
 
         }
+    }
+
+    void deleteCustomer(Integer customerId) throws Exception {
+        DbHelper db = new DbHelper();
+        String sql = "update customer set active=0 where id=?";
+        try (Connection c = db.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, customerId);
+            ps.executeUpdate();
+
+        }
+    }
+
+    void deleteAppeal(Integer appealId) throws Exception {
+        DbHelper db = new DbHelper();
+        String sql = "update appeal set active=0 where id=?";
+        try (Connection c = db.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, appealId);
+            ps.executeUpdate();
+        }
+
     }
 }
+
+
+
 

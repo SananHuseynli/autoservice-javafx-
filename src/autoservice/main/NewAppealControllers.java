@@ -77,9 +77,10 @@ public class NewAppealControllers implements Initializable {
             addApp(apply);
             JOptionPane.showMessageDialog(null,"Yeni müraciət əlavə edilmişdir");
         }catch (Exception ex) {
-            JOptionPane.showMessageDialog(null,"Error");
+            JOptionPane.showMessageDialog(null,"Xəta baş verdi");
             ex.printStackTrace();
         }
+        MainController.appealStage.close();
 
     }
 

@@ -69,12 +69,12 @@
             <Image url="@../../images/plus.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="58.0" fitWidth="58.0" layoutX="198.0" layoutY="231.0" onMouseClicked="#editClick" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="editIcon" fitHeight="58.0" fitWidth="58.0" layoutX="198.0" layoutY="231.0" onMouseClicked="#editClick" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../images/edit.png" />
          </image>
       </ImageView>
-      <ImageView fitHeight="65.0" fitWidth="58.0" layoutX="296.0" layoutY="231.0" onMouseClicked="#deleteClick" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="customerDeleteIcon" fitHeight="65.0" fitWidth="58.0" layoutX="296.0" layoutY="231.0" onMouseClicked="#customerDeleteClick" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../images/delete.png" />
          </image>
@@ -92,6 +92,26 @@
       <ImageView fx:id="appealIcon" fitHeight="52.0" fitWidth="59.0" layoutX="-3.0" layoutY="172.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../images/enrollment.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="editIcon1" fitHeight="58.0" fitWidth="58.0" layoutX="198.0" layoutY="231.0" onMouseClicked="#editClick1" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/edit.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="editIcon2" fitHeight="58.0" fitWidth="58.0" layoutX="198.0" layoutY="231.0" onMouseClicked="#editClick2" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/edit.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="serviceDeleteIcon" fitHeight="65.0" fitWidth="58.0" layoutX="296.0" layoutY="231.0" onMouseClicked="#seriveDeleteClick" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/delete.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="appealDeleteIcon" fitHeight="65.0" fitWidth="58.0" layoutX="296.0" layoutY="231.0" onMouseClicked="#appealDeleteClick" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../images/delete.png" />
          </image>
       </ImageView>
    </children>

@@ -1,29 +1,28 @@
 package autoservice.main;
 
-import autoservice.model.Car;
-import autoservice.model.CarModel;
-import autoservice.model.Customer;
+import autoservice.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
+import javax.print.DocFlavor;
 import javax.swing.*;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ResourceBundle;
 
-public class EditCustomerController implements Initializable {
+public class EditCustomerController implements Initializable, CustomerService {
+
     @FXML
     private AnchorPane editCustPane;
 
@@ -62,32 +61,43 @@ public class EditCustomerController implements Initializable {
 
     @FXML
     private Button editCustCancelBtn;
+    @FXML
+    private TableView<Apply> applyTable;
+    @FXML
+    private TableView<Customer> customerTable;
+    @FXML
+    private TableView<Service> serviceTable;
+
 
     @FXML
     void editCancelAct(ActionEvent event) {
 
+
     }
 
+
     @FXML
-    void editSaveAct(ActionEvent event) {
-        String newName=editCustNameField.getText();
-        String newPhone=editCustPhoneField.getText();
-        Car car=editCustCarCombo.getSelectionModel().getSelectedItem();
-        CarModel model=editCustModelCombo.getSelectionModel().getSelectedItem();
-        String newCarNum=editCustNumField.getText();
-        Customer customer=new Customer();
-        try{
+    void editSaveAct(ActionEvent event) throws Exception {
+        Customer customer = getCustomerById(MainController.id);
+        String newName = editCustNameField.getText();
+        String newPhone = editCustPhoneField.getText();
+        Car car = editCustCarCombo.getValue();
+        CarModel model = editCustModelCombo.getValue();
+        String newCarNum = editCustNumField.getText();
+        try {
             customer.setName(newName);
             customer.setPhone(newPhone);
             customer.setCar(car);
             customer.setModel(model);
             customer.setCarNum(newCarNum);
             updateCustomer(customer);
-            JOptionPane.showMessageDialog(null,"Customer updated");
-        }catch (Exception ex){
-            JOptionPane.showMessageDialog(null,"Error");
+            JOptionPane.showMessageDialog(null, "Müştəri yenilənmişdir");
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Xəta baş verdi");
             ex.printStackTrace();
         }
+
 
 
     }
@@ -100,8 +110,53 @@ public class EditCustomerController implements Initializable {
         editCustCarCombo.setItems(listCar);
         editCustModelCombo.setPromptText("Select Model");
         editCustModelCombo.setItems(listModel);
+        showCustomerOldData();
+
 
     }
+
+
+    void updateCustomer(Customer customer) throws Exception {
+        DbHelper db = new DbHelper();
+        String sql = "update customer \n " +
+                "set name='" + editCustNameField.getText() + "',phone='" + editCustPhoneField.getText() + "',company_id=" + (editCustCarCombo.getSelectionModel().getSelectedItem().getId()) + ",model_id=" + (editCustModelCombo.getSelectionModel().getSelectedItem().getId())
+                + ",car_num='" + editCustNumField.getText() + "' where customer.id=" + customer.getId();
+//     String sql = "update customer set name='"+editCustNameField.getText()+"' where customer.id="+customer.getId();
+        try (Connection c = db.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.executeUpdate();
+//            c.commit();
+
+        };
+    }
+
+    public Customer getCustomerById(Integer customerId) throws Exception {
+        DbHelper db = new DbHelper();
+        Customer customer = new Customer();
+        String sql = "select c.id,c.name,car.company_name,model.model_name,c.phone,c.car_num from customer c \n" +
+                "inner join car_company car on c.company_id=car.id\n" +
+                "inner join car_model model on c.model_id=model.id\n" +
+                "where c.active=1 and c.id=?";
+        try (Connection c = db.getConnection(); PreparedStatement ps = c.prepareStatement(sql);) {
+            ps.setInt(1, customerId);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Car car = new Car();
+                car.setId(rs.getInt("id"));
+                car.setCompany(rs.getString("company_name"));
+                CarModel model = new CarModel();
+                model.setId(rs.getInt("id"));
+                model.setModelName(rs.getString("model_name"));
+                customer.setId(rs.getInt("id"));
+                customer.setName(rs.getString("name"));
+                customer.setCar(car);
+                customer.setModel(model);
+                customer.setPhone(rs.getString("phone"));
+                customer.setCarNum(rs.getString("car_num"));
+            }
+        }
+        return customer;
+    }
+
     public ObservableList<Car> getCarList() {
         DbHelper db = new DbHelper();
         ObservableList<Car> list = FXCollections.observableArrayList();
@@ -119,6 +174,8 @@ public class EditCustomerController implements Initializable {
         }
         return list;
     }
+
+
     public ObservableList<CarModel> getModelList() {
         DbHelper db = new DbHelper();
         ObservableList<CarModel> list = FXCollections.observableArrayList();
@@ -139,19 +196,16 @@ public class EditCustomerController implements Initializable {
 
 
     }
-    void updateCustomer(Customer customer) throws Exception {
-        DbHelper db=new DbHelper();
-        String sql="update customer \n" +
-                "set name=?,phone=?,company_id=?,model_id=?,car_num=?\n" +
-                "where id=?";
-        try (Connection c = db.getConnection(); PreparedStatement ps = c.prepareStatement(sql)){
-            ps.setString(1,customer.getName());
-            ps.setString(2,customer.getPhone());
-            ps.setInt(3,customer.getCar().getId());
-            ps.setInt(4,customer.getModel().getId());
-            ps.setInt(5,customer.getId());
-            ps.execute();
-
+    public void showCustomerOldData(){
+        try {
+            Customer customer=getCustomerById(MainController.id);
+            editCustNameField.setText(customer.getName());
+            editCustNumField.setText(customer.getCarNum());
+            editCustPhoneField.setText(customer.getPhone());
+            editCustCarCombo.getSelectionModel().select(customer.getCar());
+            editCustModelCombo.getSelectionModel().select(customer.getModel());
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
