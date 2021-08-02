@@ -70,7 +70,12 @@ public class EditCustomerController implements Initializable, CustomerService {
 
 
     @FXML
+    private ComboBox<String>editPhonePrefix;
+
+
+    @FXML
     void editCancelAct(ActionEvent event) {
+        MainController.editCustomerStage.close();
 
 
     }
@@ -78,28 +83,33 @@ public class EditCustomerController implements Initializable, CustomerService {
 
     @FXML
     void editSaveAct(ActionEvent event) throws Exception {
+        int carIndex=editCustCarCombo.getSelectionModel().getSelectedIndex();
+        int modelIndex=editCustModelCombo.getSelectionModel().getSelectedIndex();
         Customer customer = getCustomerById(MainController.id);
+        String prefix=editPhonePrefix.getSelectionModel().getSelectedItem();
         String newName = editCustNameField.getText();
-        String newPhone = editCustPhoneField.getText();
-        Car car = editCustCarCombo.getValue();
-        CarModel model = editCustModelCombo.getValue();
+        String newPhone = prefix+editCustPhoneField.getText();
+        Car car = (Car) editCustCarCombo.getValue();
+        car.setId(carIndex+1);
+        CarModel carModel = (CarModel) editCustModelCombo.getValue();
+        carModel.setId(modelIndex+1);
         String newCarNum = editCustNumField.getText();
+
         try {
             customer.setName(newName);
             customer.setPhone(newPhone);
             customer.setCar(car);
-            customer.setModel(model);
+            customer.setModel(carModel);
             customer.setCarNum(newCarNum);
             updateCustomer(customer);
             JOptionPane.showMessageDialog(null, "Müştəri yenilənmişdir");
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Xəta baş verdi");
+            JOptionPane.showMessageDialog(null, "Zəhmət olmasa maşın və modelini seçin");
             ex.printStackTrace();
         }
 
-
-
+           MainController.editCustomerStage.close();
     }
 
     @Override
@@ -110,6 +120,7 @@ public class EditCustomerController implements Initializable, CustomerService {
         editCustCarCombo.setItems(listCar);
         editCustModelCombo.setPromptText("Select Model");
         editCustModelCombo.setItems(listModel);
+        editPhonePrefix.setItems(list);
         showCustomerOldData();
 
 
@@ -209,5 +220,5 @@ public class EditCustomerController implements Initializable, CustomerService {
         }
     }
 
-
+    ObservableList<String>list=FXCollections.observableArrayList("050 ","055 ","070 ");
 }

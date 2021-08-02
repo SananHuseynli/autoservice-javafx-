@@ -2,6 +2,7 @@ package autoservice.model;
 
 public class CarModel extends Model {
     private String modelName;
+    private Car car;
 
     public String getModelName() {
         return modelName;
@@ -11,8 +12,16 @@ public class CarModel extends Model {
         this.modelName = modelName;
     }
 
+    public Car getCar() {
+        return car;
+    }
+
+    public void setCar(Car car) {
+        this.car = car;
+    }
+
     @Override
     public String toString() {
-        return modelName;
+        return car+"  "+modelName;
     }
 }

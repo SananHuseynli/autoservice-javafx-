@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
@@ -29,11 +30,6 @@ public class EditAppealControllers implements Initializable {
     @FXML
     private Label editAppeal_CustomerLbl;
 
-    @FXML
-    private Label editAppeal_CarLbl;
-
-    @FXML
-    private Label editAppeal_ModelLbl;
 
     @FXML
     private ComboBox<Customer> editAppeal_CustomerCombo;
@@ -44,11 +40,6 @@ public class EditAppealControllers implements Initializable {
     @FXML
     private ComboBox<Service> editAppeal_ServiceCombo;
 
-    @FXML
-    private Label editAppeal_CarNameLbl;
-
-    @FXML
-    private Label editAppeal_ModelNameLbl;
 
     @FXML
     private Button editAppeal_SaveBtn;
@@ -67,11 +58,7 @@ public class EditAppealControllers implements Initializable {
 
     @FXML
     void editAppeal_CancelAction(ActionEvent event) {
-
-    }
-
-    @FXML
-    void editAppeal_OkAct(ActionEvent event) {
+        MainController.editAppealStage.close();
 
     }
 
@@ -81,6 +68,7 @@ public class EditAppealControllers implements Initializable {
         Customer customer=editAppeal_CustomerCombo.getSelectionModel().getSelectedItem();
         Status status=editAppeal_StatusCombo.getSelectionModel().getSelectedItem();
         Service service=editAppeal_ServiceCombo.getSelectionModel().getSelectedItem();
+
         try{
             apply.setCustomer(customer);
             apply.setStatus(status);
@@ -89,10 +77,10 @@ public class EditAppealControllers implements Initializable {
             JOptionPane.showMessageDialog(null,"Xidmət yenilənmişdir");
         }catch (Exception ex){
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(null,"Xəta baş verdi");
+            JOptionPane.showMessageDialog(null,"Zəhmət olmasa bütün xanaları seçin");
         }
 
-
+       MainController.editAppealStage.close();
     }
 
     @Override
@@ -171,8 +159,6 @@ public class EditAppealControllers implements Initializable {
               editAppeal_CustomerCombo.getSelectionModel().select(apply.getCustomer());
               editAppeal_StatusCombo.getSelectionModel().select(apply.getStatus());
               editAppeal_ServiceCombo.getSelectionModel().select(apply.getService());
-              editAppeal_CarLbl.setText(apply.getCustomer().getCar().getCompany());
-              editAppeal_ModelNameLbl.setText(apply.getCustomer().getModel().getModelName());
           } catch (Exception exception) {
               exception.printStackTrace();
           }

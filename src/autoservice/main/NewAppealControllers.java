@@ -61,6 +61,7 @@ public class NewAppealControllers implements Initializable {
 
     @FXML
     void cancelAction(ActionEvent event) {
+        MainController.newAppealStage.close();
 
     }
 
@@ -80,7 +81,7 @@ public class NewAppealControllers implements Initializable {
             JOptionPane.showMessageDialog(null,"Xəta baş verdi");
             ex.printStackTrace();
         }
-        MainController.appealStage.close();
+        MainController.editAppealStage.close();
 
     }
 

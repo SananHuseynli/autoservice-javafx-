@@ -4,7 +4,6 @@ import autoservice.model.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -15,15 +14,13 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ResourceBundle;
 
 public class MainController {
@@ -36,6 +33,9 @@ public class MainController {
 
     @FXML
     private Button applyBtn;
+
+    @FXML
+    private AnchorPane Pane;
 
 
     @FXML
@@ -116,6 +116,36 @@ public class MainController {
     @FXML
     private ImageView customerDeleteIcon;
 
+    @FXML
+    private ImageView addCarId;
+
+    @FXML
+    private ImageView deleteCarId;
+
+    @FXML
+    private ImageView addModelİd;
+
+    @FXML
+    private ImageView deleteModelİd;
+
+    @FXML
+    private Button carsId;
+
+    @FXML
+    private Button modelsİd;
+
+    @FXML
+    private ListView<CarModel> modelListId;
+    @FXML
+    private ListView<Car> carListİd;
+
+    @FXML
+    private StackPane stactListView;
+
+
+    @FXML
+    private StackPane stackPane;
+
 
     private String btnName = "";
 
@@ -157,6 +187,7 @@ public class MainController {
 
     @FXML
     void applyAct(ActionEvent event) throws Exception {
+        stackPane.setVisible(true);
         showApplyList();
         customerTable.setVisible(false);
         serviceTable.setVisible(false);
@@ -164,6 +195,7 @@ public class MainController {
         editIcon1.setVisible(true);
         editIcon.setVisible(false);
         editIcon2.setVisible(false);
+        appealDeleteIcon.setVisible(true);
         customerDeleteIcon.setVisible(false);
         serviceDeleteIcon.setVisible(false);
 
@@ -173,6 +205,7 @@ public class MainController {
 
     @FXML
     void customerAct(ActionEvent event) throws Exception {
+        stackPane.setVisible(true);
         showCustomerList();
         applyTable.setVisible(false);
         serviceTable.setVisible(false);
@@ -180,13 +213,16 @@ public class MainController {
         editIcon1.setVisible(false);
         editIcon2.setVisible(false);
         editIcon.setVisible(true);
+        customerDeleteIcon.setVisible(true);
         serviceDeleteIcon.setVisible(false);
         appealDeleteIcon.setVisible(false);
+
 
     }
 
     @FXML
     void serviceAct(ActionEvent event) {
+        stackPane.setVisible(true);
         showServicesList();
         applyTable.setVisible(false);
         customerTable.setVisible(false);
@@ -194,8 +230,10 @@ public class MainController {
         editIcon1.setVisible(false);
         editIcon.setVisible(false);
         editIcon2.setVisible(true);
+        serviceDeleteIcon.setVisible(true);
         customerDeleteIcon.setVisible(false);
         appealDeleteIcon.setVisible(false);
+
 
     }
 
@@ -218,9 +256,9 @@ public class MainController {
     public ObservableList<Customer> getCustomerList() {
         DbHelper db = new DbHelper();
         ObservableList<Customer> list = FXCollections.observableArrayList();
-        String sql = "select c.id,c.name,c.phone,car.company_name,model.model_name,c.car_num from customer c\n" +
-                "inner join car_company car on c.company_id = car.id\n" +
-                "inner join car_model model on c.model_id = model.id";
+        String sql = "select c.id,c.name,c.phone,car.company_name,model.model_name,c.car_num from customer c \n" +
+                "                inner join car_company car on c.company_id = car.id\n" +
+                "                inner join car_model model on c.model_id = model.id where c.active=1 order by id";
         try (Connection c = db.getConnection();
              Statement st = c.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -253,10 +291,10 @@ public class MainController {
 
         DbHelper db = new DbHelper();
         ObservableList<Apply> list = FXCollections.observableArrayList();
-        String sql = "select a.id,c.name,s.status,ser.service_name,ser.service_price from appeal a\n" +
-                "inner join customer c on a.customer_id = c.id\n" +
-                "inner join status s on a.status_id = s.id\n" +
-                "inner join service ser on a.service_id = ser.id";
+        String sql = "select a.id,c.name,s.status,ser.service_name,ser.service_price from appeal a \n" +
+                "                inner join customer c on a.customer_id = c.id\n" +
+                "                inner join status s on a.status_id = s.id\n" +
+                "                inner join service ser on a.service_id = ser.id where a.active=1";
 
         try (Connection c = db.getConnection();
              Statement st = c.createStatement();
@@ -287,6 +325,49 @@ public class MainController {
         return list;
     }
 
+    public ObservableList<Car> getCarList() {
+        DbHelper db = new DbHelper();
+        ObservableList<Car> list = FXCollections.observableArrayList();
+        String sql = "select id,company_name from car_company where active=1";
+        try (Connection c = db.getConnection();
+             Statement st = c.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                Car car = new Car();
+                car.setId(rs.getInt("id"));
+                car.setCompany(rs.getString("company_name"));
+                list.add(car);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return list;
+    }
+
+
+    public static  ObservableList<CarModel> getModelList() {
+        DbHelper db = new DbHelper();
+        ObservableList<CarModel> list = FXCollections.observableArrayList();
+        String sql = "select m.id,m.model_name,c.company_name from car_model m\n" +
+                "inner join car_company c on m.car_id = c.id";
+        try (Connection c = db.getConnection();
+             Statement st = c.createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+            while (rs.next()) {
+                CarModel model = new CarModel();
+                Car car = new Car();
+                model.setId(rs.getInt("id"));
+                model.setModelName(rs.getString("model_name"));
+                car.setCompany(rs.getString("company_name"));
+                model.setCar(car);
+                list.add(model);
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        return list;
+    }
+
     @FXML
     void showApplyList() throws Exception {
         ObservableList<Apply> applist = getApplyList();
@@ -300,34 +381,34 @@ public class MainController {
 
     }
 
-    public static Stage stage = new Stage();
-    public static Stage serviceStage = new Stage();
-    public static Stage applyStage = new Stage();
+    public static Stage newCustomerStage = new Stage();
+    public static Stage newServiceStage = new Stage();
+    public static Stage newAppealStage = new Stage();
 
     @FXML
     void addClick(MouseEvent event) throws Exception {
         switch (btnName) {
             case "customer":
                 Parent customerRoot = FXMLLoader.load(getClass().getResource("newcustomer.fxml"));
-                stage.setTitle("Add new customer");
-                stage.setScene(new Scene(customerRoot, 400, 700));
-                stage.show();
+                newCustomerStage.setTitle("Add new customer");
+                newCustomerStage.setScene(new Scene(customerRoot, 400, 700));
+                newCustomerStage.show();
                 break;
 
             case "service":
                 Parent serviceRoot = FXMLLoader.load(getClass().getResource("newservice.fxml"));
-                serviceStage.setTitle("Add new Service");
-                serviceStage.setScene(new Scene(serviceRoot, 536, 485));
-                serviceStage.setResizable(false);
-                serviceStage.show();
+                newServiceStage.setTitle("Add new Service");
+                newServiceStage.setScene(new Scene(serviceRoot, 536, 485));
+                newServiceStage.setResizable(false);
+                newServiceStage.show();
                 break;
             case "apply":
 
                 Parent applyRoot = FXMLLoader.load(getClass().getResource("newappeal.fxml"));
-                applyStage.setTitle("Add new Appeal");
-                applyStage.setScene(new Scene(applyRoot, 536, 485));
-                applyStage.setResizable(false);
-                applyStage.show();
+                newAppealStage.setTitle("Add new Appeal");
+                newAppealStage.setScene(new Scene(applyRoot, 536, 485));
+                newAppealStage.setResizable(false);
+                newAppealStage.show();
 
         }
 
@@ -335,7 +416,7 @@ public class MainController {
 
 
     public static int id;
-    public static Stage customerStage = new Stage();
+    public static Stage editCustomerStage = new Stage();
 
     @FXML
     void editClick(MouseEvent ev) throws Exception {
@@ -344,16 +425,16 @@ public class MainController {
         id = customer.getId();
         if (customer != null) {
             Parent customerRoot = FXMLLoader.load(getClass().getResource("editcustomer.fxml"));
-            customerStage.setTitle("Update customer");
-            customerStage.setScene(new Scene(customerRoot, 400, 700));
-            customerStage.show();
+            editCustomerStage.setTitle("Update customer");
+            editCustomerStage.setScene(new Scene(customerRoot, 400, 700));
+            editCustomerStage.show();
 
         }
     }
 
 
     public static int appealId;
-    public static Stage appealStage = new Stage();
+    public static Stage editAppealStage = new Stage();
 
     @FXML
     void editClick1(MouseEvent event) throws Exception {
@@ -361,10 +442,9 @@ public class MainController {
         appealId = apply.getId();
         if (apply != null) {
             Parent appealRoot = FXMLLoader.load(getClass().getResource("editappeal.fxml"));
-            Stage appealStage = new Stage();
-            appealStage.setTitle("Update appeal");
-            appealStage.setScene(new Scene(appealRoot, 400, 700));
-            appealStage.show();
+            editAppealStage.setTitle("Update appeal");
+            editAppealStage.setScene(new Scene(appealRoot, 400, 700));
+            editAppealStage.show();
         }
 
     }
@@ -387,7 +467,7 @@ public class MainController {
     }
 
     @FXML
-    void seriveDeleteClick(MouseEvent event) throws Exception {
+    void serviceDeleteClick(MouseEvent event) throws Exception {
         int isConfirmed;
         Integer serviceId = serviceTable.getSelectionModel().getSelectedItem().getId();
         if (serviceId != null) {
@@ -397,7 +477,7 @@ public class MainController {
                 JOptionPane.showMessageDialog(null, "Xidmət silinmişdir");
             }
         }
-
+        showServicesList();
     }
 
     @FXML
@@ -410,6 +490,7 @@ public class MainController {
                 deleteCustomer(customerId);
                 JOptionPane.showMessageDialog(null, "Müştəri silinmişdir");
             }
+            showCustomerList();
         }
 
     }
@@ -421,10 +502,11 @@ public class MainController {
         if (appealId != null) {
             isConfirmed = JOptionPane.showConfirmDialog(null, "Müraciəti silmək istədiyinizə əminsiniz?", "Müraciəti sil", JOptionPane.YES_NO_OPTION);
             if (isConfirmed == JOptionPane.YES_OPTION) {
-               deleteAppeal(appealId);
-                JOptionPane.showMessageDialog(null, "Müştəri silinmişdir");
+                deleteAppeal(appealId);
+                JOptionPane.showMessageDialog(null, "Müraciər silinmişdir");
             }
         }
+        showApplyList();
     }
 
     void deleteService(Integer serviceId) throws Exception {
@@ -456,8 +538,175 @@ public class MainController {
         }
 
     }
+
+    @FXML
+    void carsAct(ActionEvent event) {
+        carListİd.setItems(getCarList());
+        modelListId.setVisible(false);
+        carListİd.setVisible(true);
+
+    }
+
+    @FXML
+    void modelsAct(ActionEvent event) {
+        modelListId.setItems(getModelList());
+        carListİd.setVisible(false);
+        modelListId.setVisible(true);
+
+    }
+     static Stage carStage = new Stage();
+    @FXML
+    void addCarClick(MouseEvent event) throws Exception {
+        Parent carRoot = FXMLLoader.load(getClass().getResource("newcar.fxml"));
+        carStage.setTitle("Add new car");
+        carStage.setScene(new Scene(carRoot, 531, 193));
+        carStage.setResizable(false);
+        carStage.show();
+
+    }
+
+    @FXML
+    void deleteCarClick(MouseEvent event) throws Exception {
+        int isConfirmed;
+        Integer carId =carListİd.getSelectionModel().getSelectedItem().getId();
+        if (carId != null) {
+            isConfirmed = JOptionPane.showConfirmDialog(null, "Avtomobili silmət istəyirsiniz?", "Xidməti sil", JOptionPane.YES_NO_OPTION);
+            if (isConfirmed == JOptionPane.YES_OPTION) {
+                deleteCar(carId);
+                JOptionPane.showMessageDialog(null, "Avtomobil silinmişdir");
+            }
+            showCarListView();
+        }
+
+    }
+
+void showCarListView(){
+        ObservableList<Car>list=getCarList();
+        carListİd.setItems(list);
+        carListİd.setVisible(true);
 }
 
+
+    @FXML
+    void addModelClick(MouseEvent event) throws Exception {
+        Stage modelStage=new Stage();
+        Parent modelRoot = FXMLLoader.load(getClass().getResource("newModel.fxml"));
+        modelStage.setTitle("Add new car");
+        modelStage.setScene(new Scene(modelRoot, 503, 218));
+        modelStage.setResizable(false);
+        modelStage.show();
+
+    }
+
+
+
+    @FXML
+    void deleteModelClick(MouseEvent event) {
+
+    }
+
+    @FXML
+    void closeListClick(MouseEvent event) {
+        carListİd.setVisible(false);
+        modelListId.setVisible(false);
+
+    }
+
+
+    void addCar(Car car) throws Exception {
+        DbHelper db = new DbHelper();
+        String sql = "insert into car_company\n" +
+                "values(nextval('car_seq'),?,'1')";
+        try (Connection c = db.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setString(1, car.getCompany());
+            ps.execute();
+
+        }
+
+    }
+
+    void deleteCar(Integer carId) throws Exception {
+        DbHelper db = new DbHelper();
+        String sql = "update car_company set active=0 where id=?";
+        try (Connection c = db.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, carId);
+            ps.executeUpdate();
+        }
+    }
+
+    @FXML
+    private AnchorPane newCarPane;
+
+    @FXML
+    private TextField newCarField;
+
+    @FXML
+    private Label newCarLbl;
+
+    @FXML
+    private Button newCarSaveBtn;
+
+    @FXML
+    private Button newCarClearBtn;
+
+    @FXML
+    void newCarClearAct(ActionEvent event) {
+        newCarField.setText("");
+
+    }
+
+    @FXML
+    void newCarSaveAct(ActionEvent event) {
+        String carName = newCarField.getText();
+        Car car = new Car();
+        try {
+            car.setCompany(carName);
+            addCar(car);
+            JOptionPane.showMessageDialog(null, "Yeni avtomobil əlavə edilmişdir");
+            carStage.close();
+        } catch (Exception exception) {
+            JOptionPane.showMessageDialog(null, "Xəta baş verdi");
+            exception.printStackTrace();
+        }
+    }
+    @FXML
+    private AnchorPane newModelPane;
+
+    @FXML
+    private ComboBox<Car>newModelCarCombo;
+
+    @FXML
+    private TextField newModelNameField;
+
+    @FXML
+    private Button newModelSaveBtn;
+
+    @FXML
+    private Button newModelClearBtn;
+
+    @FXML
+    void newModelClearAct(ActionEvent event) {
+
+    }
+
+    @FXML
+    void newModelSaveAct(ActionEvent event) {
+
+    }
+    void addModel(CarModel model) throws Exception{
+        DbHelper db = new DbHelper();
+        String sql = "insert into car_model\n" +
+                "values(nextval('model_seq'),'?','1',?)";
+        try (Connection c = db.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setString(1, model.getModelName());
+            ps.setInt(2,model.getCar().getId());
+            ps.execute();
+
+        }
+    }
+
+
+}
 
 
 

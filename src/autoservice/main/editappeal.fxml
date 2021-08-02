@@ -6,52 +6,32 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="editAppeal_Pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="446.0" prefWidth="407.0" style="-fx-background-color: Khaki;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="autoservice.main.EditAppealControllers">
+<AnchorPane fx:id="editAppeal_Pane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="359.0" prefWidth="407.0" style="-fx-background-color: Khaki;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="autoservice.main.EditAppealControllers">
    <children>
       <Label fx:id="editAppeal_CustomerLbl" alignment="BASELINE_LEFT" layoutX="1.0" layoutY="53.0" prefHeight="45.0" prefWidth="96.0" text="Müştəri">
          <font>
             <Font size="22.0" />
          </font>
       </Label>
-      <Label fx:id="editAppeal_CarLbl" alignment="BASELINE_LEFT" layoutX="1.0" layoutY="110.0" prefHeight="45.0" prefWidth="104.0" text="Avtomobil">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Label>
-      <Label fx:id="editAppeal_ModelLbl" alignment="BASELINE_LEFT" layoutX="1.0" layoutY="176.0" prefHeight="45.0" prefWidth="96.0" text="Model">
-         <font>
-            <Font size="22.0" />
-         </font>
-      </Label>
       <ComboBox fx:id="editAppeal_CustomerCombo" layoutX="107.0" layoutY="59.0" prefHeight="34.0" prefWidth="229.0" />
-      <Label fx:id="editAppeal_ServiceLbl" alignment="BASELINE_LEFT" layoutX="5.0" layoutY="243.0" prefHeight="45.0" prefWidth="96.0" text="Xidmət">
+      <Label fx:id="editAppeal_ServiceLbl" alignment="BASELINE_LEFT" layoutX="5.0" layoutY="124.0" prefHeight="45.0" prefWidth="96.0" text="Xidmət">
          <font>
             <Font size="22.0" />
          </font>
       </Label>
-      <ComboBox fx:id="editAppeal_ServiceCombo" layoutX="107.0" layoutY="248.0" prefHeight="34.0" prefWidth="229.0" />
-      <Label fx:id="editAppeal_CarNameLbl" alignment="BASELINE_LEFT" layoutX="107.0" layoutY="121.0" prefHeight="34.0" prefWidth="229.0" style="-fx-background-color: white;">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Label fx:id="editAppeal_ModelNameLbl" alignment="BASELINE_LEFT" layoutX="107.0" layoutY="182.0" prefHeight="34.0" prefWidth="229.0" style="-fx-background-color: white;">
-         <font>
-            <Font size="20.0" />
-         </font>
-      </Label>
-      <Button fx:id="editAppeal_SaveBtn" layoutX="28.0" layoutY="388.0" mnemonicParsing="false" onAction="#editAppeal_SaveAction" prefHeight="34.0" prefWidth="121.0" text="Save">
+      <ComboBox fx:id="editAppeal_ServiceCombo" layoutX="107.0" layoutY="130.0" prefHeight="34.0" prefWidth="229.0" />
+      <Button fx:id="editAppeal_SaveBtn" layoutX="14.0" layoutY="301.0" mnemonicParsing="false" onAction="#editAppeal_SaveAction" prefHeight="34.0" prefWidth="121.0" text="Save">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
-      <Button fx:id="editAppeal_CancelBtn" layoutX="241.0" layoutY="388.0" mnemonicParsing="false" onAction="#editAppeal_CancelAction" prefHeight="34.0" prefWidth="121.0" text="Cancel">
+      <Button fx:id="editAppeal_CancelBtn" layoutX="250.0" layoutY="301.0" mnemonicParsing="false" onAction="#editAppeal_CancelAction" prefHeight="34.0" prefWidth="121.0" text="Cancel">
          <font>
             <Font size="20.0" />
          </font>
       </Button>
-      <ComboBox fx:id="editAppeal_StatusCombo" layoutX="107.0" layoutY="310.0" prefHeight="34.0" prefWidth="229.0" />
-      <Label fx:id="editAppeal_Statuslbl" alignment="BASELINE_LEFT" layoutX="5.0" layoutY="305.0" prefHeight="45.0" prefWidth="96.0" text="Status">
+      <ComboBox fx:id="editAppeal_StatusCombo" layoutX="107.0" layoutY="201.0" prefHeight="34.0" prefWidth="229.0" />
+      <Label fx:id="editAppeal_Statuslbl" alignment="BASELINE_LEFT" layoutX="5.0" layoutY="201.0" prefHeight="45.0" prefWidth="96.0" text="Status">
          <font>
             <Font size="22.0" />
          </font>
