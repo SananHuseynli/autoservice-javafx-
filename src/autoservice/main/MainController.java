@@ -23,7 +23,7 @@ import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
 
-public class MainController  {
+public class MainController {
 
     @FXML
     private Button serviceBtn;
@@ -64,9 +64,6 @@ public class MainController  {
 
     @FXML
     private TableColumn<Customer, String> col_CustomerPhone;
-
-    @FXML
-    private TableColumn<Customer, Car> col_CustomerCar;
 
     @FXML
     private TableColumn<Customer, CarModel> col_CustomerModel;
@@ -242,9 +239,8 @@ public class MainController  {
         ObservableList<Customer> customerList = getCustomerList();
         col_CustomerId.setCellValueFactory(new PropertyValueFactory<Customer, Integer>("id"));
         col_CustomerName.setCellValueFactory(new PropertyValueFactory<Customer, String>("name"));
-        col_CustomerCar.setCellValueFactory(new PropertyValueFactory<Customer, Car>("car"));
         col_CustomerPhone.setCellValueFactory(new PropertyValueFactory<Customer, String>("phone"));
-        col_CustomerModel.setCellValueFactory(new PropertyValueFactory<Customer, CarModel>("model"));
+        col_CustomerModel.setCellValueFactory(new PropertyValueFactory<Customer, CarModel>("abc"));
         col_carNum.setCellValueFactory(new PropertyValueFactory<Customer, String>("carNum"));
         customerTable.setItems(customerList);
         customerTable.setVisible(true);
@@ -256,9 +252,9 @@ public class MainController  {
     public ObservableList<Customer> getCustomerList() {
         DbHelper db = new DbHelper();
         ObservableList<Customer> list = FXCollections.observableArrayList();
-        String sql = "select c.id,c.name,c.phone,car.company_name,model.model_name,c.car_num from customer c \n" +
-                "                inner join car_company car on c.company_id = car.id\n" +
-                "                inner join car_model model on c.model_id = model.id where c.active=1 order by id";
+        String sql = "select c.id,c.name,c.phone,car.company_name,model.model_name,c.car_num from customer c " +
+                "inner join car_company car on c.company_id = car.id " +
+                "inner join car_model model on c.model_id = model.id where c.active=1 order by id";
         try (Connection c = db.getConnection();
              Statement st = c.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -345,11 +341,11 @@ public class MainController  {
     }
 
 
-    public static  ObservableList<CarModel> getModelList() {
+    public static ObservableList<CarModel> getModelList() {
         DbHelper db = new DbHelper();
         ObservableList<CarModel> list = FXCollections.observableArrayList();
         String sql = "select m.id,m.model_name,c.company_name from car_model m\n" +
-                "inner join car_company c on m.car_id = c.id";
+                "inner join car_company c on m.car_id = c.id where m.active=1 order by car_id";
         try (Connection c = db.getConnection();
              Statement st = c.createStatement();
              ResultSet rs = st.executeQuery(sql)) {
@@ -392,6 +388,7 @@ public class MainController  {
                 Parent customerRoot = FXMLLoader.load(getClass().getResource("newcustomer.fxml"));
                 newCustomerStage.setTitle("Add new customer");
                 newCustomerStage.setScene(new Scene(customerRoot, 400, 700));
+                newCustomerStage.setResizable(false);
                 newCustomerStage.show();
                 break;
 
@@ -399,6 +396,7 @@ public class MainController  {
                 Parent serviceRoot = FXMLLoader.load(getClass().getResource("newservice.fxml"));
                 newServiceStage.setTitle("Add new Service");
                 newServiceStage.setScene(new Scene(serviceRoot, 536, 485));
+                newServiceStage.setResizable(false);
                 newServiceStage.setResizable(false);
                 newServiceStage.show();
                 break;
@@ -427,6 +425,7 @@ public class MainController  {
             Parent customerRoot = FXMLLoader.load(getClass().getResource("editcustomer.fxml"));
             editCustomerStage.setTitle("Update customer");
             editCustomerStage.setScene(new Scene(customerRoot, 400, 700));
+            editCustomerStage.setResizable(false);
             editCustomerStage.show();
 
         }
@@ -444,6 +443,7 @@ public class MainController  {
             Parent appealRoot = FXMLLoader.load(getClass().getResource("editappeal.fxml"));
             editAppealStage.setTitle("Update appeal");
             editAppealStage.setScene(new Scene(appealRoot, 400, 700));
+            editAppealStage.setResizable(false);
             editAppealStage.show();
         }
 
@@ -554,12 +554,14 @@ public class MainController  {
         modelListId.setVisible(true);
 
     }
-     static Stage carStage = new Stage();
+
+    static Stage carStage = new Stage();
+
     @FXML
     void addCarClick(MouseEvent event) throws Exception {
         Parent carRoot = FXMLLoader.load(getClass().getResource("newcar.fxml"));
         carStage.setTitle("Add new car");
-        carStage.setScene(new Scene(carRoot, 531, 193));
+        carStage.setScene(new Scene(carRoot, 570, 204));
         carStage.setResizable(false);
         carStage.show();
 
@@ -568,7 +570,7 @@ public class MainController  {
     @FXML
     void deleteCarClick(MouseEvent event) throws Exception {
         int isConfirmed;
-        Integer carId =carListİd.getSelectionModel().getSelectedItem().getId();
+        Integer carId = carListİd.getSelectionModel().getSelectedItem().getId();
         if (carId != null) {
             isConfirmed = JOptionPane.showConfirmDialog(null, "Avtomobili silmət istəyirsiniz?", "Xidməti sil", JOptionPane.YES_NO_OPTION);
             if (isConfirmed == JOptionPane.YES_OPTION) {
@@ -580,27 +582,43 @@ public class MainController  {
 
     }
 
-void showCarListView(){
-        ObservableList<Car>list=getCarList();
+    void showCarListView() {
+        ObservableList<Car> list = getCarList();
         carListİd.setItems(list);
         carListİd.setVisible(true);
-}
+    }
 
-static Stage modelStage=new Stage();
+    void showModelList() {
+        ObservableList<CarModel> list = getModelList();
+        modelListId.setItems(list);
+        modelListId.setVisible(true);
+    }
+
+    static Stage modelStage = new Stage();
+
     @FXML
     void addModelClick(MouseEvent event) throws Exception {
         Parent modelRoot = FXMLLoader.load(getClass().getResource("newModel.fxml"));
         modelStage.setTitle("Add new model");
-        modelStage.setScene(new Scene(modelRoot, 503, 218));
+        modelStage.setScene(new Scene(modelRoot, 517, 253));
         modelStage.setResizable(false);
         modelStage.show();
 
     }
 
 
-
     @FXML
-    void deleteModelClick(MouseEvent event) {
+    void deleteModelClick(MouseEvent event) throws Exception {
+        int isConfirmed;
+        Integer modelId = modelListId.getSelectionModel().getSelectedItem().getId();
+        if (modelId != null) {
+            isConfirmed = JOptionPane.showConfirmDialog(null, "Modeli silmət istəyirsiniz?", "Xidməti sil", JOptionPane.YES_NO_OPTION);
+            if (isConfirmed == JOptionPane.YES_OPTION) {
+                deleteModel(modelId);
+                JOptionPane.showMessageDialog(null, "Model silinmişdir");
+            }
+            showModelList();
+        }
 
     }
 
@@ -612,10 +630,6 @@ static Stage modelStage=new Stage();
     }
 
 
-
-
-
-
     void deleteCar(Integer carId) throws Exception {
         DbHelper db = new DbHelper();
         String sql = "update car_company set active=0 where id=?";
@@ -625,7 +639,15 @@ static Stage modelStage=new Stage();
         }
     }
 
+    void deleteModel(Integer modelId) throws Exception {
+        DbHelper db = new DbHelper();
+        String sql = "update car_model set active=0 where id=?";
+        try (Connection c = db.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setInt(1, modelId);
+            ps.executeUpdate();
+        }
 
+    }
 
 
 }

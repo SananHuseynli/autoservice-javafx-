@@ -39,6 +39,7 @@ public class newModelController implements Initializable {
 
     @FXML
     void newModelClearAct(ActionEvent event) {
+        newModelNameField.setText("");
 
     }
 

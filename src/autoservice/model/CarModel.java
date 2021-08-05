@@ -22,6 +22,6 @@ public class CarModel extends Model {
 
     @Override
     public String toString() {
-        return car+"  "+modelName;
+        return car + " " + modelName;
     }
 }

@@ -15,7 +15,7 @@
          </font>
       </Label>
       <TextField fx:id="editCustNameField" layoutX="210.0" layoutY="58.0" prefHeight="34.0" prefWidth="183.0" />
-      <TextField fx:id="editCustPhoneField" layoutX="210.0" layoutY="115.0" prefHeight="34.0" prefWidth="183.0" />
+      <TextField fx:id="editCustPhoneField" layoutX="210.0" layoutY="115.0" onKeyPressed="#editPhoneInput" prefHeight="34.0" prefWidth="183.0" />
       <Label fx:id="editCustPhoneLbl" alignment="BASELINE_LEFT" layoutX="1.0" layoutY="110.0" prefHeight="45.0" prefWidth="163.0" text="Telefon">
          <font>
             <Font size="22.0" />

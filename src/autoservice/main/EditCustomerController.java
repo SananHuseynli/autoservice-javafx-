@@ -1,6 +1,8 @@
 package autoservice.main;
 
 import autoservice.model.*;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -11,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -79,6 +82,29 @@ public class EditCustomerController implements Initializable, CustomerService {
 
 
     }
+    @FXML
+    void editPhoneInput(KeyEvent event) {
+        String text=event.getText();
+        editCustPhoneField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    editCustPhoneField.setText(newValue.replaceAll("[^\\d]", ""));
+
+                }
+                if (editCustPhoneField.getText().length()>8){
+                    Alert alert=new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setContentText("Maksimum simvol sayı 8");
+                    alert.show();
+                }
+            }
+
+
+
+        });
+
+    }
 
 
     @FXML
@@ -86,9 +112,9 @@ public class EditCustomerController implements Initializable, CustomerService {
         int carIndex=editCustCarCombo.getSelectionModel().getSelectedIndex();
         int modelIndex=editCustModelCombo.getSelectionModel().getSelectedIndex();
         Customer customer = getCustomerById(MainController.id);
-        String prefix=editPhonePrefix.getSelectionModel().getSelectedItem();
+        String prefix1= editPhonePrefix.getSelectionModel().getSelectedItem();
         String newName = editCustNameField.getText();
-        String newPhone = prefix+editCustPhoneField.getText();
+        String newPhone = editCustPhoneField.getText();
         Car car = (Car) editCustCarCombo.getValue();
         car.setId(carIndex+1);
         CarModel carModel = (CarModel) editCustModelCombo.getValue();
@@ -97,7 +123,7 @@ public class EditCustomerController implements Initializable, CustomerService {
 
         try {
             customer.setName(newName);
-            customer.setPhone(newPhone);
+            customer.setPhone(prefix1+newPhone);
             customer.setCar(car);
             customer.setModel(carModel);
             customer.setCarNum(newCarNum);

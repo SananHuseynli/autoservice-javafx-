@@ -79,12 +79,11 @@
       </ImageView>
       <StackPane fx:id="stackPane" layoutX="-3.0" layoutY="339.0" prefHeight="564.0" prefWidth="1382.0" visible="false" AnchorPane.bottomAnchor="-26.0" AnchorPane.leftAnchor="-27.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="315.0">
          <children>
-            <TableView fx:id="customerTable" prefHeight="501.0" prefWidth="1343.0" visible="false">
+            <TableView fx:id="customerTable" prefHeight="501.0" prefWidth="1343.0">
               <columns>
                 <TableColumn fx:id="col_CustomerId" prefWidth="75.0" text="Id" />
                 <TableColumn fx:id="col_CustomerName" prefWidth="182.0" text="Ad -Soyad" />
                   <TableColumn fx:id="col_CustomerPhone" prefWidth="211.0" text="Telefon" />
-                  <TableColumn fx:id="col_CustomerCar" prefWidth="261.0" text="Avtomobil" />
                   <TableColumn fx:id="col_CustomerModel" minWidth="0.0" prefWidth="147.0" text="Model" />
                   <TableColumn fx:id="col_carNum" prefWidth="250.0" text="Avtomobil nömrəsi" />
               </columns>
@@ -103,11 +102,11 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <TableView fx:id="serviceTable" prefHeight="431.0" prefWidth="1106.0" visible="false">
+            <TableView fx:id="serviceTable" nodeOrientation="LEFT_TO_RIGHT" prefHeight="431.0" prefWidth="1106.0" visible="false">
               <columns>
-                <TableColumn fx:id="col_servicesİd" prefWidth="132.0" text="Id" />
-                <TableColumn fx:id="col_services" minWidth="0.0" prefWidth="567.0" text="Xidmətlər" />
-                  <TableColumn fx:id="col_serPrice" maxWidth="1155.0" minWidth="0.0" prefWidth="405.0" text="Qiymət (Azn)" />
+                <TableColumn fx:id="col_servicesİd" maxWidth="300.0" prefWidth="505.0" sortable="false" text="Id" />
+                <TableColumn fx:id="col_services" maxWidth="2000.0" minWidth="0.0" prefWidth="712.0" text="Xidmətlər" />
+                  <TableColumn fx:id="col_serPrice" maxWidth="1155.0" minWidth="0.0" prefWidth="568.0" text="Qiymət (Azn)" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

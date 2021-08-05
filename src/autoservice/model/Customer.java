@@ -8,6 +8,8 @@ public class Customer extends Model {
     private CarModel model;
     private String carNum;
 
+    private String abc;
+
     public String getName() {
         return name;
     }
@@ -46,6 +48,14 @@ public class Customer extends Model {
 
     public void setCarNum(String carNum) {
         this.carNum = carNum;
+    }
+
+    public String getAbc() {
+        return car.toString() + " " + model.getModelName();
+    }
+
+    public void setAbc(String abc) {
+        this.abc = abc;
     }
 
     @Override
