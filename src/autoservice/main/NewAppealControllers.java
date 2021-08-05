@@ -135,7 +135,7 @@ public class NewAppealControllers implements Initializable {
         DbHelper db=new DbHelper();
         String sql="insert into appeal\n" +
                 "values(nextval('appeal_seq'),?,1,?,?)";
-        try(Connection c=db.getConnection(); PreparedStatement ps=c.prepareStatement(sql)){
+         try(Connection c=db.getConnection(); PreparedStatement ps=c.prepareStatement(sql)){
             ps.setInt(1,apply.getCustomer().getId());
             ps.setInt(2,apply.getStatus().getId());
             ps.setInt(3,apply.getService().getId());

@@ -23,7 +23,7 @@ import java.net.URL;
 import java.sql.*;
 import java.util.ResourceBundle;
 
-public class MainController {
+public class MainController  {
 
     @FXML
     private Button serviceBtn;
@@ -586,12 +586,11 @@ void showCarListView(){
         carListİd.setVisible(true);
 }
 
-
+static Stage modelStage=new Stage();
     @FXML
     void addModelClick(MouseEvent event) throws Exception {
-        Stage modelStage=new Stage();
         Parent modelRoot = FXMLLoader.load(getClass().getResource("newModel.fxml"));
-        modelStage.setTitle("Add new car");
+        modelStage.setTitle("Add new model");
         modelStage.setScene(new Scene(modelRoot, 503, 218));
         modelStage.setResizable(false);
         modelStage.show();
@@ -613,17 +612,9 @@ void showCarListView(){
     }
 
 
-    void addCar(Car car) throws Exception {
-        DbHelper db = new DbHelper();
-        String sql = "insert into car_company\n" +
-                "values(nextval('car_seq'),?,'1')";
-        try (Connection c = db.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setString(1, car.getCompany());
-            ps.execute();
 
-        }
 
-    }
+
 
     void deleteCar(Integer carId) throws Exception {
         DbHelper db = new DbHelper();
@@ -634,76 +625,7 @@ void showCarListView(){
         }
     }
 
-    @FXML
-    private AnchorPane newCarPane;
 
-    @FXML
-    private TextField newCarField;
-
-    @FXML
-    private Label newCarLbl;
-
-    @FXML
-    private Button newCarSaveBtn;
-
-    @FXML
-    private Button newCarClearBtn;
-
-    @FXML
-    void newCarClearAct(ActionEvent event) {
-        newCarField.setText("");
-
-    }
-
-    @FXML
-    void newCarSaveAct(ActionEvent event) {
-        String carName = newCarField.getText();
-        Car car = new Car();
-        try {
-            car.setCompany(carName);
-            addCar(car);
-            JOptionPane.showMessageDialog(null, "Yeni avtomobil əlavə edilmişdir");
-            carStage.close();
-        } catch (Exception exception) {
-            JOptionPane.showMessageDialog(null, "Xəta baş verdi");
-            exception.printStackTrace();
-        }
-    }
-    @FXML
-    private AnchorPane newModelPane;
-
-    @FXML
-    private ComboBox<Car>newModelCarCombo;
-
-    @FXML
-    private TextField newModelNameField;
-
-    @FXML
-    private Button newModelSaveBtn;
-
-    @FXML
-    private Button newModelClearBtn;
-
-    @FXML
-    void newModelClearAct(ActionEvent event) {
-
-    }
-
-    @FXML
-    void newModelSaveAct(ActionEvent event) {
-
-    }
-    void addModel(CarModel model) throws Exception{
-        DbHelper db = new DbHelper();
-        String sql = "insert into car_model\n" +
-                "values(nextval('model_seq'),'?','1',?)";
-        try (Connection c = db.getConnection(); PreparedStatement ps = c.prepareStatement(sql)) {
-            ps.setString(1, model.getModelName());
-            ps.setInt(2,model.getCar().getId());
-            ps.execute();
-
-        }
-    }
 
 
 }
